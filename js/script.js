@@ -88,4 +88,34 @@ let secreta = posiblesPalabras[Math.floor(Math.random()*posiblesPalabras.length)
 let palabrasecreta = secreta[0] 
 let palabraoculta = ""
 
+//create letter buttons
+const generarBotones = () => {
+  
+  let fragment = document.createDocumentFragment()
+  
+  abecedario.forEach(element => {
+    let letra = document.createElement("BUTTON")
+    letra.classList.add("btn", "btn-outline-success", "m-1", "font-weight-bold")
+    letra.textContent = element
+    fragment.append(letra)
+  })
+
+  botonera.append(fragment)
+}
+
+//create hyphens
+const generarGuiones = () => {
+ 
+  let guion = "_"
+  palabraoculta = guion.repeat(palabrasecreta.length)
+  palabra.textContent += palabraoculta
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  generarBotones()
+  generarGuiones()
+})
+
+
 
