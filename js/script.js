@@ -83,10 +83,25 @@ let intentos = document.getElementById("intentos");
 let imagen = document.getElementById("imagen");
 let pista = document.getElementById("pista");
 
+
+let secreta 
+let palabrasecreta
+let palabraoculta
+
 //select the secret word and the clue
-let secreta = posiblesPalabras[Math.floor(Math.random()*posiblesPalabras.length)]
-let palabrasecreta = secreta[0] 
-let palabraoculta = ""
+const generarPalabra = () => {
+  secreta = posiblesPalabras[Math.floor(Math.random()*posiblesPalabras.length)]
+  palabrasecreta = secreta[0] 
+}
+
+//create hyphens
+const generarGuiones = () => {
+ 
+  let guion = "_"
+  palabraoculta = guion.repeat(palabrasecreta.length)
+  palabra.textContent = palabraoculta
+}
+
 
 //create letter buttons
 const generarBotones = () => {
@@ -103,19 +118,28 @@ const generarBotones = () => {
   botonera.append(fragment)
 }
 
-//create hyphens
-const generarGuiones = () => {
- 
-  let guion = "_"
-  palabraoculta = guion.repeat(palabrasecreta.length)
-  palabra.textContent += palabraoculta
-}
-
 
 document.addEventListener("DOMContentLoaded", () => {
-  generarBotones()
+  generarPalabra()
   generarGuiones()
+  generarBotones()
 })
-
+    
+    
+// change buttons style when pressing
+botonera.addEventListener("click", (event) => {
+  if (event.target.tagName === "BUTTON") {
+    event.target.classList.remove("btn-outline-success", "font-weight-bold")
+    
+    console.log(event.target.textContent)
+    console.log(palabrasecreta)
+    if (palabrasecreta.toUpperCase().includes(event.target.textContent)) {
+      event.target.classList.add("tamanio-botones", "btn-success")
+    } else {
+      event.target.classList.add("tamanio-botones", "btn-danger")
+    }
+  }
+})
+    
 
 
