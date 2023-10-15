@@ -88,14 +88,16 @@ let secreta
 let palabrasecreta
 let palabraoculta
 
+//////////////////////// INITIAL CHARGE FUNCTIONS ///////////////////////////
+
 //select the secret word and the clue
-const generarPalabra = () => {
+const setWord = () => {
   secreta = posiblesPalabras[Math.floor(Math.random()*posiblesPalabras.length)]
-  palabrasecreta = secreta[0] 
+  palabrasecreta = secreta[0].toUpperCase() 
 }
 
 //create hyphens
-const generarGuiones = () => {
+const setHyphens = () => {
  
   let guion = "_"
   palabraoculta = guion.repeat(palabrasecreta.length)
@@ -104,7 +106,7 @@ const generarGuiones = () => {
 
 
 //create letter buttons
-const generarBotones = () => {
+const setButtons = () => {
   
   let fragment = document.createDocumentFragment()
   
@@ -120,24 +122,49 @@ const generarBotones = () => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  generarPalabra()
-  generarGuiones()
-  generarBotones()
+  setWord()
+  setHyphens()
+  setButtons()
 })
-    
-    
-// change buttons style when pressing
+
+//////////////////////// CHECK LETTER FUNCTIONS ///////////////////////////
+
+// check button  
+const checkButton = (cont, event) => {
+  event.target.classList.remove("btn-outline-success", "font-weight-bold")
+  if (cont > 0) {
+    //change buttons style
+    event.target.classList.add("tamanio-botones", "btn-success")
+  } else {
+    //change buttons style
+    event.target.classList.add("tamanio-botones", "btn-danger")
+    // decrease attempts
+    intentos.textContent = parseInt(intentos.textContent) - 1
+  }
+}
+
+// show letters in the hidden word and count successes
+const showLetters = (letra) => {
+  let cont = 0
+    for (let i = 0; i < palabrasecreta.length; i++) {
+      if (palabrasecreta[i] == letra) {
+        palabraoculta = palabraoculta.substring(0, i) + letra + palabraoculta.substring(i + 1);
+        cont ++
+      } 
+      palabra.textContent = palabraoculta 
+    }
+  return cont
+}
+
+
+
+// check letter when pressing
 botonera.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
-    event.target.classList.remove("btn-outline-success", "font-weight-bold")
+    const letra = event.target.textContent
+
+    checkButton(showLetters(letra),event)
     
-    console.log(event.target.textContent)
-    console.log(palabrasecreta)
-    if (palabrasecreta.toUpperCase().includes(event.target.textContent)) {
-      event.target.classList.add("tamanio-botones", "btn-success")
-    } else {
-      event.target.classList.add("tamanio-botones", "btn-danger")
-    }
   }
 })
     
