@@ -87,6 +87,7 @@ let pista = document.getElementById("pista");
 let secreta 
 let palabrasecreta
 let palabraoculta
+let textopista = document.getElementById("texto-pista")
 
 //////////////////////// INITIAL CHARGE FUNCTIONS ///////////////////////////
 
@@ -158,23 +159,24 @@ const handlerErrors = () => {
   let ruta = "imagenes/ahorcado_" + oportunidades + ".png"
   imagen.setAttribute("src", ruta)
   //show a game over message
-  if (oportunidades == 0) {
-      
-    botonera.innerHTML = ""
-
-    let cabecera = document.createElement("P")
-    cabecera.classList.add("cabecera")
-    cabecera.textContent = "NO HAS ACERTADO"
-
-    botonera.append(cabecera)
-    
-    palabra.textContent = "LA PALABRA ERA " + palabrasecreta 
-
-    pista.setAttribute("disabled", "disabled")
-
-  }
+  if (oportunidades == 0) 
+    showHeader("gameover")
 }
 
+const showHeader = (status) => {
+  botonera.innerHTML = ""
+  let cabecera = document.createElement("P")
+  cabecera.classList.add("cabecera")
+  if (status == "success") {
+    cabecera.textContent = "FELICIDADES"
+  } else if (status == "gameover") {
+    cabecera.textContent = "NO HAS ACERTADO"
+    palabra.textContent = "LA PALABRA ERA " + palabrasecreta
+  }
+  botonera.append(cabecera)
+  
+  pista.setAttribute("disabled", "disabled")
+}
 
 
 ///////////////////////////////// EVENTS //////////////////////////////
@@ -189,7 +191,15 @@ botonera.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
     const letra = event.target.textContent
     checkButton(matchLetters(letra),event)
+    
+    if (palabrasecreta === palabraoculta) {
+      showHeader("success")
+    }
   }
+})
+
+pista.addEventListener("click", () => {
+  textopista.textContent = secreta[1]
 })
 
 inicio.addEventListener("click", () => {
