@@ -121,12 +121,6 @@ const setButtons = () => {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  setWord()
-  setHyphens()
-  setButtons()
-})
-
 //////////////////////// CHECK LETTER FUNCTIONS ///////////////////////////
 
 // check button  
@@ -138,13 +132,12 @@ const checkButton = (cont, event) => {
   } else {
     //change buttons style
     event.target.classList.add("tamanio-botones", "btn-danger")
-    // decrease attempts
-    intentos.textContent = parseInt(intentos.textContent) - 1
+    handlerErrors()
   }
 }
 
 // show letters in the hidden word and count successes
-const showLetters = (letra) => {
+const matchLetters = (letra) => {
   let cont = 0
     for (let i = 0; i < palabrasecreta.length; i++) {
       if (palabrasecreta[i] == letra) {
@@ -156,17 +149,49 @@ const showLetters = (letra) => {
   return cont
 }
 
+// show next image and decrease attempts
+const handlerErrors = () => {
+  let oportunidades = parseInt(intentos.textContent) - 1
+  // decrease attempts
+  intentos.textContent = oportunidades
+  // show next image
+  let ruta = "imagenes/ahorcado_" + oportunidades + ".png"
+  imagen.setAttribute("src", ruta)
+  //show a game over message
+  if (oportunidades == 0) {
+      
+    botonera.innerHTML = ""
+
+    let cabecera = document.createElement("P")
+    cabecera.classList.add("cabecera")
+    cabecera.textContent = "NO HAS ACERTADO"
+
+    botonera.append(cabecera)
+    
+    palabra.textContent = "LA PALABRA ERA " + palabrasecreta 
+
+    pista.setAttribute("disabled", "disabled")
+
+  }
+}
 
 
-// check letter when pressing
+
+///////////////////////////////// EVENTS //////////////////////////////
+
+document.addEventListener("DOMContentLoaded", () => {
+  setWord()
+  setHyphens()
+  setButtons()
+})
+
 botonera.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
     const letra = event.target.textContent
-
-    checkButton(showLetters(letra),event)
-    
+    checkButton(matchLetters(letra),event)
   }
 })
-    
 
-
+inicio.addEventListener("click", () => {
+  window.location.reload()
+})
