@@ -152,7 +152,7 @@ const matchLetters = (letra) => {
 
 // show next image and decrease attempts
 const handlerErrors = () => {
-  let oportunidades = parseInt(intentos.textContent) - 1
+  let oportunidades = parseInt(intentos.textContent) -1
   // decrease attempts
   intentos.textContent = oportunidades
   // show next image
@@ -188,6 +188,9 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 botonera.addEventListener("click", (event) => {
+  
+  event.target.disabled = "disabled"
+
   if (event.target.tagName === "BUTTON") {
     const letra = event.target.textContent
     checkButton(matchLetters(letra),event)
